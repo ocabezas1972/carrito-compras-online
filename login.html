@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Simple</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --primary:#2563eb;
+      --primary-hover:#1d4ed8;
+      --text:#0b1320;
+      --muted:#64748b;
+      --card:#ffffff;
+      --overlay:rgba(2, 6, 23, 0.6);
+      --radius:12px;
+      --shadow:0 10px 30px rgba(2, 6, 23, 0.15);
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); color: var(--text); background: #f3f4f6; }
+    header { background: linear-gradient(135deg, var(--bg), #1e293b); color: #fff; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+    header img.logo { width: 40px; height: 40px; border-radius: 8px; background: #fff; object-fit: cover; }
+    header h1 { font-size: 18px; margin: 0; font-weight: 600; }
+    header .spacer { flex: 1; }
+    header .btn { background: #ffffff; color: #0f172a; border: none; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+    header .btn:focus { outline: 2px solid #fff; outline-offset: 2px; }
+    main { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; }
+    .modal-overlay { position: fixed; inset: 0; background: var(--overlay); display: none; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
+    .modal { background: var(--card); width: 100%; max-width: 420px; border-radius: var(--radius); box-shadow: var(--shadow); position: relative; overflow: hidden; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #eef2f7; }
+    .modal-header h2 { margin: 0; font-size: 18px; }
+    .modal-close { background: transparent; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 4px 8px; }
+    .modal-body { padding: 20px; }
+    .field { margin-bottom: 16px; }
+    .label { display: block; margin-bottom: 6px; font-weight: 600; color: #0b1320; }
+    .input { width: 100%; padding: 12px 14px; border: 1px solid #d6dce5; border-radius: 10px; font-size: 14px; background: #fff; }
+    .input:focus { border-color: var(--primary); outline: 3px solid rgba(37, 99, 235, 0.15); }
+    .help { font-size: 12px; color: var(--muted); margin-top: 6px; }
+    .actions { display: flex; gap: 10px; margin-top: 8px; }
+    .btn-primary { background: var(--primary); color: #fff; border: none; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-weight: 700; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: transparent; color: var(--muted); border: 1px solid #d6dce5; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+    .note { margin-top: 10px; font-size: 12px; color: var(--muted); }
+    @media (max-width: 480px) { header h1 { font-size: 16px; } .modal { max-width: 95vw; } }
+  </style>
+</head>
+<body>
+  <header>
+    <img class="logo" src="https://via.placeholder.com/80x80.png?text=LOGO" alt="Logo"/>
+    <h1>Mi Aplicación</h1>
+    <div class="spacer"></div>
+    <button id="openLogin" class="btn" aria-haspopup="dialog" aria-controls="loginModal">Iniciar sesión</button>
+  </header>
+  <main>
+    <div class="card">
+      <h2>Bienvenida 👋</h2>
+      <p>Presiona <strong>Iniciar sesión</strong> para abrir el modal de login.</p>
+    </div>
+  </main>
+  <div id="loginOverlay" class="modal-overlay" aria-hidden="true">
+    <div id="loginModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <div class="modal-header">
+        <h2 id="loginTitle">Acceso</h2>
+        <button class="modal-close" aria-label="Cerrar" id="closeLogin">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm" novalidate>
+          <div class="field">
+            <label for="email" class="label">Correo</label>
+            <input id="email" name="email" class="input" type="email" placeholder="tu@correo.com" autocomplete="email" required />
+            <div class="help">Usa un correo válido.</div>
+          </div>
+          <div class="field">
+            <label for="password" class="label">Contraseña</label>
+            <input id="password" name="password" class="input" type="password" placeholder="••••••••" autocomplete="current-password" minlength="6" required />
+            <div class="help">Mínimo 6 caracteres.</div>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn-primary">Guardar</button>
+            <button type="button" class="btn-secondary" id="cancelLogin">Cancelar</button>
+          </div>
+          <p class="note">* Este ejemplo no envía datos a un servidor.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    const openBtn = document.getElementById('openLogin');
+    const overlay = document.getElementById('loginOverlay');
+    const closeBtn = document.getElementById('closeLogin');
+    const cancelBtn = document.getElementById('cancelLogin');
+    const form = document.getElementById('loginForm');
+    const email = document.getElementById('email');
+    function openModal() { overlay.style.display = 'flex'; overlay.setAttribute('aria-hidden', 'false'); setTimeout(() => email.focus(), 50); document.body.style.overflow = 'hidden'; }
+    function closeModal() { overlay.style.display = 'none'; overlay.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; openBtn.focus(); }
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.style.display === 'flex') closeModal(); });
+    form.addEventListener('submit', (e) => { e.preventDefault(); if (!form.checkValidity()) { form.reportValidity(); return; } const data = { email: form.email.value.trim(), password: form.password.value }; console.log('Datos guardados:', data); alert('Datos guardados (demo):\n' + JSON.stringify(data, null, 2)); closeModal(); form.reset(); });
+  </script>
+</body>
+</html>
