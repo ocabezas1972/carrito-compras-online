@@ -1,2 +1,5 @@
-# carrito-compras-online
-carrito-compras-online
+
+
+orlando y Carlita # Proyecto: Compra con carrito por internet
+ Este repositorio describe de forma conceptual cómo funciona un sistema de compra online con carrito.
+
